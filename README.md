@@ -1,4 +1,4 @@
-# Fleet management with Artemis - Showcase
+# Showcase: Fleet management with Artemis
 
 This repository demonstrates how fleet-management with Artemis can be done in
 combination with GitHub actions.
