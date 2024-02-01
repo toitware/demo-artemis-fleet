@@ -1,0 +1,46 @@
+# Zero-Clause BSD License
+
+# Copyright (C) 2024 Toitware ApS.
+
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+# FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  # The fleet root (directory containing the fleet.json file).
+  FLEET_ROOT: "${{ github.workspace }}"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: toitware/action-setup-artemis@v1.0.0
+
+      - name: Log into Artemis
+        # Set the ARTEMIS_EMAIL and ARTEMIS_PASSWORD at
+        # https://github.com/toitware/show-artemis-pods/settings/secrets/actions
+        run: |
+          artemis auth login --email='${{ secrets.ARTEMIS_EMAIL }}' --password='${{ secrets.ARTEMIS_PASSWORD }}'
+
+      - name: Roll out fleet
+        run: |
+          artemis --fleet-root=${{ env.FLEET_ROOT }} fleet roll-out
