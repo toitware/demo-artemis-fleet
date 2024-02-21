@@ -3,7 +3,7 @@
   "organization": "9bf2cfe4-c05b-4aad-bcab-54aaa8f9a7c5",
   "groups": {
     "default": {
-      "pod": "demo-pod@latest"
+      "pod": "demo-pod@v1.2.1"
     }
   }
 }
